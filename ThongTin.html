@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tài khoản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .info-row {
+            margin-bottom: 10px;
+        }
+        .info-label {
+            font-weight: bold;
+        }
+        .role {
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .editable {
+            background-color: #fff8c4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Thông tin tài khoản</h1>
+    
+    <div class="info-row">
+        <span class="info-label">Tài khoản:</span> <span id="username">user123</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Mật khẩu:</span> <span>*******</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Gmail:</span> <span id="gmail">user123@gmail.com</span>
+    </div>
+    <div class="info-row">
+        <span class="info-label">Chức vụ:</span> 
+        <span id="role" class="role">Boss</span>
+        <!-- Chức năng thay đổi chức vụ cho người dùng nếu cần -->
+        <select id="role-select" style="display:none;" onchange="updateRole()">
+            <option value="Boss">Boss</option>
+            <option value="Quản Lý">Quản Lý</option>
+            <option value="Nhân Viên">Nhân Viên</option>
+            <option value="Khách Hàng">Khách Hàng</option>
+        </select>
+        <button id="change-role-btn" onclick="toggleRoleEdit()">Thay đổi chức vụ</button>
+    </div>
+
+    <!-- Các bảng khác sẽ hiển thị dưới đây -->
+    <div id="quan-ly" class="role-table">
+        <h2>Bảng Quản Lý</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tiền thu vào</th>
+                    <th>Hàng đã bán</th>
+                    <th>Nguyên liệu còn trong kho</th>
+                    <th>Bảng lương</th>
+                </tr>
+            </thead>
+            <tbody id="quan-ly-body">
+                <tr>
+                    <td class="editable">100,000,000 VND</td>
+                    <td class="editable">Điện thoại Samsung, Laptop Dell</td>
+                    <td class="editable">50 kg nguyên liệu A, 30 kg nguyên liệu B</td>
+                    <td class="editable">Lương: 10,000,000 VND</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bảng Nhân Viên -->
+    <div id="nhan-vien" class="role-table" style="display:none;">
+        <h2>Bảng Nhân Viên</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tiền thu vào</th>
+                    <th>Hàng đã bán</th>
+                    <th>Thông tin khách hàng</th>
+                </tr>
+            </thead>
+            <tbody id="nhan-vien-body">
+                <tr>
+                    <td>50,000,000 VND</td>
+                    <td>Điện thoại Samsung</td>
+                    <td>Khách hàng: user123@gmail.com</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bảng Khách Hàng -->
+    <div id="khach-hang" class="role-table" style="display:none;">
+        <h2>Bảng Khách Hàng</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Khuyến mãi</th>
+                    <th>Điểm thưởng</th>
+                    <th>Sự kiện</th>
+                </tr>
+            </thead>
+            <tbody id="khach-hang-body">
+                <tr>
+                    <td>Giảm giá 20% cho đơn hàng tiếp theo</td>
+                    <td>500 điểm</td>
+                    <td>Hội chợ công nghệ tháng 12</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    // Thông tin tài khoản
+    var userRole = 'Quản Lý'; // Thay đổi giá trị này để test (Boss, Quản Lý, Nhân Viên, Khách Hàng)
+
+    // Hiển thị thông tin theo chức vụ
+    document.getElementById('role').innerText = userRole;
+
+    // Chỉ hiển thị chức năng thay đổi chức vụ cho "Boss"
+    function toggleRoleEdit() {
+        var roleSelect = document.getElementById('role-select');
+        var changeRoleBtn = document.getElementById('change-role-btn');
+        roleSelect.style.display = roleSelect.style.display === 'none' ? 'inline' : 'none';
+        changeRoleBtn.innerText = roleSelect.style.display === 'none' ? 'Thay đổi chức vụ' : 'Lưu thay đổi';
+    }
+
+    // Cập nhật chức vụ khi người dùng chọn
+    function updateRole() {
+        var newRole = document.getElementById('role-select').value;
+        document.getElementById('role').innerText = newRole;
+        userRole = newRole; // Cập nhật lại biến userRole
+        toggleRoleEdit(); // Đóng dropdown sau khi thay đổi
+        updateTableVisibility(); // Cập nhật lại quyền truy cập bảng
+    }
+
+    // Cập nhật bảng hiển thị theo chức vụ
+    function updateTableVisibility() {
+        if (userRole === 'Boss') {
+            document.getElementById('quan-ly').style.display = 'block';
+            document.getElementById('nhan-vien').style.display = 'block';
+            document.getElementById('khach-hang').style.display = 'block';
+        } else if (userRole === 'Quản Lý') {
+            document.getElementById('quan-ly').style.display = 'block';
+            document.getElementById('nhan-vien').style.display = 'none';
+            document.getElementById('khach-hang').style.display = 'none';
+        } else if (userRole === 'Nhân Viên') {
+            document.getElementById('nhan-vien').style.display = 'block';
+            document.getElementById('quan-ly').style.display = 'none';
+            document.getElementById('khach-hang').style.display = 'none';
+        } else if (userRole === 'Khách Hàng') {
+            document.getElementById('khach-hang').style.display = 'block';
+            document.getElementById('quan-ly').style.display = 'none';
+            document.getElementById('nhan-vien').style.display = 'none';
+        }
+    }
+
+    // Gọi hàm để cập nhật bảng khi trang tải
+    updateTableVisibility();
+</script>
+
+</body>
+</html>
