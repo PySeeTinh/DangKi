@@ -73,8 +73,14 @@
             const email = document.getElementById("register-email").value;
             const password = document.getElementById("register-password").value;
 
-            // Lấy danh sách người dùng đã đăng ký từ localStorage
+            // Kiểm tra email có bị trùng không
             let users = JSON.parse(localStorage.getItem("users")) || [];
+            const existingUser = users.find(user => user.email === email);
+    
+                if (existingUser) {
+                    alert("Email is already registered. Please use a different one.");
+                    return;
+                }
 
             // Thêm người dùng mới vào danh sách
             users.push({ name, email, password });
@@ -82,12 +88,11 @@
             // Lưu lại danh sách người dùng vào localStorage
             localStorage.setItem("users", JSON.stringify(users));
 
+            // Thông báo thành công
             alert("Registration successful! You can now go to the dashboard.");
 
-            // Reset form fields
-            document.getElementById("register-name").value = '';
-            document.getElementById("register-email").value = '';
-            document.getElementById("register-password").value = '';
+            // Điều hướng đến trang khác (hoặc reset form nếu muốn)
+            window.location.href = "https://pyseetinh.github.io/DataAccount/"; // Ví dụ điều hướng đến dashboard
         }
     </script>
 </body>
